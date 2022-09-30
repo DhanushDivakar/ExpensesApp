@@ -15,7 +15,7 @@ class NewTranscation extends StatelessWidget {
     }
     addTx(enteredTitle, enteredAmount);
   }
-
+//hello
   @override
   Widget build(BuildContext context) {
     return Card(
