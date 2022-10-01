@@ -13,18 +13,23 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter App',
       theme: ThemeData(
-          primarySwatch: Colors.lightGreen,
-          accentColor: Colors.amber,
-          fontFamily: 'Montserrat',
-          appBarTheme: AppBarTheme(
-            titleTextStyle: TextStyle(
+        primarySwatch: Colors.lightGreen,
+        accentColor: Colors.amber,
+        errorColor: Colors.red,
+        fontFamily: 'Montserrat',
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
               fontFamily: 'Montserrat',
               fontSize: 20,
-              fontWeight: FontWeight.bold
-            ),
-              textTheme: ThemeData.light()
-                  .textTheme
-                  .copyWith(headline6: TextStyle(fontFamily: 'Montserrat')))),
+              fontWeight: FontWeight.bold),
+
+          textTheme: ThemeData.light().textTheme.copyWith(
+                headline6: TextStyle(fontFamily: 'Montserrat'),
+            button: TextStyle(color: Colors.white)
+              ),
+
+        ),
+      ),
       home: MyHomePage(),
     );
   }
@@ -59,12 +64,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(String txTitle, double txAmount, DateTime choosenDate) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: choosenDate,
       id: DateTime.now().toString(),
     );
 
@@ -84,6 +88,16 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  void _deleteTranscation(String id){
+    setState(() {
+     _userTransactions.removeWhere((tx) {
+       return tx.id == id;
+
+     });
+    });
+
   }
 
   @override
@@ -111,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Chart(_recentTranscations),
-              TransactionList(_userTransactions),
+              TransactionList(_userTransactions, _deleteTranscation),
             ],
           ),
         ),
