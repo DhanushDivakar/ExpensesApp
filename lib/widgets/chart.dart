@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:untitled/widgets/chart_bar.dart';
 
 import '../models/transcation.dart';
 
@@ -22,7 +23,16 @@ class Chart extends StatelessWidget {
       print("HI");
       print(DateFormat.E().format(weekDay));
       print(totalSum);
-      return {'day': DateFormat.E().format(weekDay).substring(0, 1), 'amount': totalSum};
+      return {
+        'day': DateFormat.E().format(weekDay).substring(0, 1),
+        'amount': totalSum
+      };
+    });
+  }
+
+  double get totalSpending {
+    return groupedTranscationvalues.fold(0.0, (sum, item) {
+      return sum + item['amount'];
     });
   }
 
@@ -31,10 +41,22 @@ class Chart extends StatelessWidget {
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
-      child: Row(
-        children: groupedTranscationvalues.map((data) {
-          return Text('${data['day']}: ${data['amount']}');
-        }).toList(),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: groupedTranscationvalues.map((data) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                  data['day'],
+                  data['amount'],
+                  totalSpending == 0.0
+                      ? 0.0
+                      : (data['amount'] as double) / totalSpending),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
