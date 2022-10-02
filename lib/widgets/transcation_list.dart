@@ -12,7 +12,6 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 600,
       child: transactions.isEmpty
           ? Column(
               children: [
@@ -38,18 +37,27 @@ class TransactionList extends StatelessWidget {
                     leading: CircleAvatar(radius: 30,
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: FittedBox(child: Text('\$${transactions[index].amount}')),
+                      child: FittedBox(child: Text('\$${transactions[index].amount}',
+
+                      ),
+
+                      ),
                     ),
                     ),
                     title: Text(transactions[index].title,
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).appBarTheme.titleTextStyle,
                     ),
                     subtitle: Text(DateFormat.yMMMd().format(transactions[index].date)),
 
-                    trailing: IconButton(icon: Icon(Icons.delete),
+                    trailing: MediaQuery.of(context).size.width > 460 ? FlatButton.icon(
+                      textColor: Theme.of(context).errorColor,
+                        icon: Icon(Icons.delete),
+                        label: Text("Delete"),
+                        onPressed: () =>deleteTx(transactions[index].id)
+                    ) : IconButton(icon: Icon(Icons.delete),
                       color: Theme.of(context).errorColor,
                       onPressed: () =>deleteTx(transactions[index].id)
-                      ,),
+                      ,)
 
                   ),
                 );
